@@ -1,0 +1,144 @@
+# ============================================================
+# Automated Semen Viability and Counting Analysis
+# Master Configuration File
+# ============================================================
+
+project:
+  name: "Automated Semen Viability and Counting Analysis"
+  version: "1.0.0"
+  author: "CV Engineering Team"
+  description: "End-to-end AI system for semen quality assessment"
+
+# ────────────────────────────────────────────────
+# Paths
+# ────────────────────────────────────────────────
+paths:
+  datasets:
+    evisan:       "datasets/EVISAN"
+    roboflow:     "datasets/Roboflow"
+    smids:        "datasets/SMIDS"
+    visem:        "datasets/visem-dataset"
+    yolo_ready:   "datasets/yolo_ready"
+
+  models:
+    detection:    "models/detection/best.pt"
+    morphology:   "models/morphology/efficientnet_morphology.pth"
+    viability:    "models/viability/viability_model.pkl"
+
+  outputs:
+    detections:   "outputs/detections"
+    tracking:     "outputs/tracking"
+    reports:      "outputs/reports"
+    plots:        "outputs/plots"
+
+  logs:           "logs"
+
+# ────────────────────────────────────────────────
+# Dataset Settings
+# ────────────────────────────────────────────────
+dataset:
+  train_ratio:  0.70
+  val_ratio:    0.15
+  test_ratio:   0.15
+  random_seed:  42
+  image_size:   640          # YOLOv8 input size
+  class_names:              # YOLO class indices
+    - "sperm"
+
+# ────────────────────────────────────────────────
+# Detection (YOLOv8)
+# ────────────────────────────────────────────────
+detection:
+  model_variant:  "yolov8n.pt"   # nano; swap to yolov8m.pt for better accuracy
+  epochs:         50
+  batch_size:     4
+  image_size:     640
+  conf_threshold: 0.25
+  iou_threshold:  0.45
+  device:         "cpu"          # "cuda" if GPU available
+  patience:       20
+  lr0:            0.01
+  workers:        0
+
+# ────────────────────────────────────────────────
+# Tracking (ByteTrack via Ultralytics)
+# ────────────────────────────────────────────────
+tracking:
+  tracker:          "bytetrack.yaml"
+  conf_threshold:   0.3
+  iou_threshold:    0.5
+  max_age:          30           # frames before track is dropped
+  min_hits:         3
+  trajectory_len:   50           # max trajectory points to draw
+
+# ────────────────────────────────────────────────
+# Motility Analysis (CASA-inspired)
+# ────────────────────────────────────────────────
+motility:
+  fps:              30           # video frames per second
+  pixel_to_micron:  0.5         # µm per pixel (calibrate per microscope)
+  vcl_threshold:    25.0        # µm/s — VCL cutoff for motile
+  vsl_threshold:    5.0         # µm/s
+  progressive_str:  0.5         # straightness for progressive
+  min_track_frames: 10          # discard tracks shorter than this
+
+  # Classification thresholds
+  progressive_vcl:    25.0
+  nonprogressive_vcl:  5.0
+
+# ────────────────────────────────────────────────
+# Morphology (EfficientNetB0)
+# ────────────────────────────────────────────────
+morphology:
+  model:        "efficientnetb0"
+  num_classes:  2
+  class_names:
+    - "Normal"
+    - "Abnormal"
+  image_size:   224
+  epochs:       30
+  batch_size:   32
+  lr:           0.001
+  weight_decay: 1.0e-4
+  device:       "cpu"
+
+# ────────────────────────────────────────────────
+# Viability Estimation
+# ────────────────────────────────────────────────
+viability:
+  model:        "random_forest"   # or "xgboost"
+  n_estimators: 200
+  max_depth:    8
+  random_seed:  42
+
+# ────────────────────────────────────────────────
+# Semen Quality Scoring Weights
+# ────────────────────────────────────────────────
+scoring:
+  weights:
+    count:       0.25
+    motility:    0.35
+    morphology:  0.20
+    viability:   0.20
+
+  # Reference ranges (WHO 2021 criteria)
+  who_reference:
+    count_min_M_per_mL:       16    # million/mL
+    progressive_motility_min: 30    # %
+    normal_morphology_min:     4    # %
+    viability_min:            54    # %
+
+  categories:
+    excellent:  [80, 100]
+    good:       [60,  80]
+    average:    [40,  60]
+    poor:       [ 0,  40]
+
+# ────────────────────────────────────────────────
+# Report
+# ────────────────────────────────────────────────
+report:
+  title:       "Semen Analysis Report"
+  institution: "AI-Powered Andrology Lab"
+  logo_path:   "app/assets/logo.png"
+  pdf_template: "src/reporting/template.html"

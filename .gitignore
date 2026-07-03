@@ -1,0 +1,24 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+
+# YOLO outputs
+runs/
+
+# Model weights
+*.pt
+
+# Dataset
+datasets/
+
+# Logs
+logs/
+
+# Output files
+outputs/
+
+# VS Code
+.vscode/
