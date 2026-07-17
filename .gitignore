@@ -9,7 +9,11 @@ venv/
 runs/
 
 # Model weights
+# Ignore all PyTorch models
 *.pt
+
+# But include the deployment model
+!models/detection/best.pt
 
 # Dataset
 datasets/
