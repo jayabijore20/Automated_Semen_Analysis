@@ -93,8 +93,8 @@ morphology:
   model:        "efficientnetb0"
   num_classes:  2
   class_names:
-    - "Normal"
     - "Abnormal"
+    - "Normal"
   image_size:   224
   epochs:       30
   batch_size:   32
