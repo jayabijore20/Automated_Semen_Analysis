@@ -5,8 +5,7 @@
 # ============================================================
  
 # Core Computer Vision & Image Processing
-opencv-python>=4.8.0
-opencv-contrib-python>=4.8.0
+opencv-python-headless>=4.8.0
 Pillow>=10.0.0
 scikit-image>=0.21.0
 imageio>=2.31.0
