@@ -22,7 +22,21 @@ datasets/
 logs/
 
 # Output files
-outputs/
+# Ignore generated files inside outputs
+outputs/**
+
+# Keep the folder structure
+!outputs/
+!outputs/csv/
+!outputs/detections/
+!outputs/json/
+!outputs/plots/
+!outputs/reports/
+!outputs/tracking/
+!outputs/videos/
+
+# Keep placeholder files
+!outputs/**/.gitkeep
 
 # VS Code
 .vscode/
