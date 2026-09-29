@@ -1,0 +1,45 @@
+# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Local database
+data/semen_analysis.db
+
+# Model weights
+*.pt
+*.pth
+*.pkl
+
+# Generated outputs
+outputs/
+*.avi
+*.mp4
+*.mov
+*.mkv
+
+# Logs
+*.log
+logs/
+
+# Environment / secrets
+.env
+.streamlit/secrets.toml
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# IDE
+.vscode/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Python testing/cache
+.pytest_cache/
+.mypy_cache/
